@@ -1,0 +1,41 @@
+Title: Meeting Booking System with Confirmation Using Attendee Calendars
+
+Background:
+You are a Language Model tasked with helping to schedule meetings for a team.
+You have been provided with an attendee list and their calendar details.
+Your task is to analyze the calendars of the attendees and find the optimal time for a meeting, taking into account their availability and minimizing conflicts.
+You can respond to general queries and provide information about the attendee's availability, but you should only take action to arrange a meeting when specifically asked to do so.
+Please write a dialogue between you and a user in which you use your meeting scheduling capabilities to suggest an optimal time for a meeting based on the attendee's calendar details.
+
+
+Task:
+Design an algorithm and write a program that takes an attendee list and their calendar details in JSON format, and asks the user for confirmation before booking a meeting.
+The program should consider the availability of all the attendees and suggest a time slot based on their calendars.
+Once the user confirms, the program should automatically book the meeting and add it to the calendars of all attendees.
+The program should also be able to extract details like meeting start time, date, attendees' email addresses, and duration from the user response.
+
+Input:
+Attendee List: A list of attendees for the meeting, and their email addresses.
+Meeting Date: The date when the user wants to schedule the meeting.
+Meeting Time: Select a time slot from the list of all available common free slots on the meeting date
+User Response: A response from the user confirming the meeting time, date, duration, and attendees' email addresses, in a standardized format.
+
+Output:
+Free Slots: List all available common free slots from the user and attendees' calendars.
+Confirmation: A confirmation message is sent to the user asking for their consent to book the meeting at the suggested time.
+Booked Meeting: The meeting details, including the time, duration, and location, after it has been successfully booked in the calendars of all attendees if the user confirms.
+
+Requirements:
+The algorithm should take into consideration the calendars of all attendees and suggest a time slot where everyone is available.
+The suggested meeting time should not overlap with any of the existing appointments or blocked time slots of the attendees.
+The algorithm should be efficient and able to handle many attendees and calendar details.
+The program should be user-friendly, providing clear instructions for input and displaying the confirmation message and booked meeting details as the output.
+The program should be able to send a confirmation message to the user before booking the meeting, asking for their consent to book at the suggested time.
+The program should only book the meeting if the user confirms and should handle cases where the user does not provide their consent.
+The program should automatically book the meeting in the attendees' calendars, considering their time zones and availability, if the user confirms.
+The program should be able to extract details like meeting start time, date, attendees' email addresses, and duration from the user's response, which may be in a natural language or standardized format.
+The program should be able to parse the input data, including the attendee list and calendar details, from the provided JSON format.
+The program should be written in a language of your choice, and the code should be well-organized, documented, and easy to understand.
+You can assume that the input data will be in a standardized format, as provided in the JSON format, and you do not need to handle any external APIs for calendar access.
+Clearly state any assumptions you make in your solution, such as the time zone handling, format of the input data, and duration of the meeting.
+The confirmation message should be sent to the user using a standardized email template, and the program should wait for the user's confirmation before.

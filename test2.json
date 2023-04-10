@@ -1,0 +1,37 @@
+ {
+    "kind": "calendar#event",
+    "etag": "XXXXXXXXXXXXXX",
+    "id": "1234567890",
+    "status": "confirmed",
+    "htmlLink": "https://calendar.google.com/event?id=1234567890",
+    "created": "2023-04-06T08:30:00.000Z",
+    "updated": "2023-04-06T08:45:00.000Z",
+    "summary": "Dummy Event",
+    "location": "123 Main St, Anytown, USA",
+    "description": "This is a dummy event created for testing purposes.",
+    "start": {
+    "dateTime": "2023-04-13T09:00:00-07:00",
+    "timeZone": "America/Los_Angeles"
+    },
+    "end": {
+    "dateTime": "2023-04-13T10:30:00-07:00",
+    "timeZone": "America/Los_Angeles"
+    },
+    "recurrence": [],
+    "attendees": [
+    {
+    "email": "john.doe@example.com",
+    "displayName": "John Doe",
+    "responseStatus": "accepted"
+    },
+    {
+    "email": "jane.doe@example.com",
+    "displayName": "Jane Doe",
+    "responseStatus": "tentative"
+    }
+    ],
+    "organizer": {
+    "email": "james.smith@example.com",
+    "displayName": "James Smith"
+    }
+ }
