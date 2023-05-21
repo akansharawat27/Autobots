@@ -7,7 +7,6 @@ import re
 # Load the 'en_core_web_sm' model
 nlp = spacy.load('en_core_web_sm')
 
-
 # Define a function to convert date parameters to "year-month-day" format
 def convert_date_parameter(text):
     # Parse the input text with spaCy

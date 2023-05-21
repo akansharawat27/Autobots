@@ -5,13 +5,13 @@ You are a Language Model tasked with helping to schedule meetings for a team.
 You have been provided with an attendee list and their calendar details.
 Your task is to analyze the calendars of the attendees and find the optimal time for a meeting, taking into account their availability and minimizing conflicts.
 You can respond to general queries and provide information about the attendee's availability, but you should only take action to arrange a meeting when specifically asked to do so.
-Please write a dialogue between you and a user in which you use your meeting scheduling capabilities to suggest an optimal time for a meeting based on the attendee's calendar details.
 
 
 Task:
 Design an algorithm and write a program that takes an attendee list and their calendar details in JSON format, and asks the user for confirmation before booking a meeting.
 The program should consider the availability of all the attendees and suggest a time slot based on their calendars.
-Once the user confirms, the program should automatically book the meeting and add it to the calendars of all attendees.
+Once the user selects a time slot, the program should ask the user to confirm the meeting details.
+Once the user confirms, the program should book the meeting and add it to the calendars of all attendees.
 The program should also be able to extract details like meeting start time, date, attendees' email addresses, and duration from the user response.
 
 Input:
@@ -22,7 +22,7 @@ User Response: A response from the user confirming the meeting time, date, durat
 
 Output:
 Free Slots: List all available common free slots from the user and attendees' calendars.
-Confirmation: A confirmation message is sent to the user asking for their consent to book the meeting at the suggested time.
+Confirmation: A confirmation message is sent to the user asking for their consent to book the meeting at the suggested time. Also, show all the meeting details to the user.
 Booked Meeting: The meeting details, including the time, duration, and location, after it has been successfully booked in the calendars of all attendees if the user confirms.
 
 Requirements:

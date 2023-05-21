@@ -38,12 +38,20 @@ def extract_meeting_time_from_user_prompt(user_prompt):
     meeting_time = None
 
     # Extract time value from user prompt
-    time_regex = r'(?i)(\d{1,2}(\s?:\s?\d{1,2})?\s?[apm.]+)'
-    time_match = re.search(time_regex, user_prompt)
-    if time_match:
-        meeting_time = time_match.group(1)
-        # Convert time value to HH:MM:SS format
-        meeting_time = parse(meeting_time).strftime("%H:%M:%S")
+    if not meeting_time:
+        time_regex = r'(?i)(\d{1,2})[:\s]?(\d{0,2})?\s?([apAP][mM])'
+        time_match = re.search(time_regex, user_prompt)
+        if time_match:
+            hour = time_match.group(1)
+            minute = time_match.group(2) if time_match.group(2) else "00"
+            am_pm = time_match.group(3).lower()
+            if am_pm == "pm" and int(hour) < 12:
+                hour = str(int(hour) + 12)
+            elif am_pm == "am" and hour == "12":
+                hour = "00"
+            meeting_time = f"{hour}:{minute}:00"
+        else:
+            meeting_time = None
 
     # print('meeting_time_test', meeting_time)
     return meeting_time;
@@ -52,6 +60,7 @@ def extract_meeting_time_from_user_prompt(user_prompt):
 def extract_meeting_date_from_user_prompt(user_prompt):
     # Process the user prompt with spaCy
     doc = nlp(user_prompt)
+    meeting_date = None
 
     for token in doc:
         if token.ent_type_ == 'DATE':

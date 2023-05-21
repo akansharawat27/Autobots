@@ -2,21 +2,22 @@ import openai
 from create_event import create_event
 from get_details import extract_attendees_list_from_user_prompt, extract_meeting_time_from_user_prompt, extract_meeting_date_from_user_prompt
 from get_busy_slots import get_busy_slots
-from get_common_free_slots import find_common_free_slots
-import datetime
+# from get_common_free_slots import find_common_free_slots
 import pickle
 from google_auth_oauthlib.flow import InstalledAppFlow
 from date_extract import convert_date_parameter
+from test import find_common_free_slots
 
-openai.api_key = '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'
+openai.api_key = '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'
 
 # Define a global list variable to store messages
 messages = []
 meeting_title = None
 meeting_date = None
 meeting_time = None
-meeting_attendees = []
+meeting_attendees = None
 creds = None
+
 
 def get_api_response(prompt: str) -> str | None:
     text: str | None = None
@@ -100,8 +101,6 @@ def main():
         user_input: str = input('You: ')
         # print('user_input', user_input)
 
-        common_free_slots = []
-
         if 'schedule a meeting' in user_input.lower():
             # print('Entering the if condition')
             prompt_list.append(system)
@@ -111,59 +110,56 @@ def main():
             # print('meeting_date_value: ', meeting_date)
 
             global meeting_attendees
-            meeting_attendees.append(extract_attendees_list_from_user_prompt(user_input))
+            meeting_attendees = extract_attendees_list_from_user_prompt(user_input)
             prompt_list.append(str(meeting_attendees))
+
             # global meeting_title
             # meeting_title.append(f"Meeting with {meeting_attendees}")
 
             authorization_setup()
 
-            person1_busy_slots = []
+            person_busy_slots = []
             for attendee in meeting_attendees:
-                email_address = attendee[0]
-                person1_busy_slots = get_busy_slots(email_address, convert_date_parameter(meeting_date), creds)
+                # print('email_address', attendee)
+                person1_busy_slots = get_busy_slots(attendee, convert_date_parameter(meeting_date), creds)
+                person_busy_slots.append(person1_busy_slots)
 
             # Get your all available time slots
             person2_busy_slots = get_busy_slots('akansharawat2728@gmail.com', convert_date_parameter(meeting_date), creds)
+            person_busy_slots.append(person2_busy_slots)
 
-            start_time = '2023-04-11T11:00:00+05:30'
-            end_time = '2023-04-11T19:00:00+05:30'
-            common_free_slots = find_common_free_slots(person1_busy_slots, person2_busy_slots, start_time, end_time)
+            # print('print busy slots', person_busy_slots)
+
+            start_time = meeting_date + 'T11:00:00+05:30'
+            end_time = meeting_date + 'T19:00:00+05:30'
+            # common_free_slots = find_common_free_slots(person1_busy_slots, person2_busy_slots, start_time, end_time)
+            common_free_slots = find_common_free_slots(person_busy_slots, start_time, end_time)
+            prompt_list.append(str(common_free_slots))
             # print(common_free_slots)
+
+        # if meeting_time is not None:
+        #    response += f'Here are the meeting details:\nAttendees\' List: {meeting_attendees}\nDate: {meeting_date}\nTime: {meeting_time}\nPlease confirm.'
+
+        response: str = get_bot_response(user_input, prompt_list)
 
         global meeting_time
         if meeting_time is not None:
             updated_meeting_time = extract_meeting_time_from_user_prompt(user_input)
             if updated_meeting_time is not None:
                 meeting_time = updated_meeting_time
-                # print('New meeting time:', meeting_time)
+                prompt_list.append(str(meeting_time))
+                print('New meeting time:', meeting_time)
 
         if not meeting_time:
             # Extract time using dateutil
-            meeting_time = extract_meeting_time_from_user_prompt(user_input)
-            # print('meeting_time:', meeting_time)
-
-        if meeting_time is not None:
+            meeting_time_1 = None
+            meeting_time_1 = extract_meeting_time_from_user_prompt(user_input)
+            if not meeting_time_1:
+                meeting_time_1 = extract_meeting_time_from_user_prompt(response)
+            if meeting_time_1 is not None:
+                meeting_time = meeting_time_1
             prompt_list.append(str(meeting_time))
-            # response = f'Here are the meeting details:\nAttendees\' List: {meeting_attendees}\nDate: {meeting_date}\nTime: {meeting_time}\nPlease confirm.'
-
-        response: str = get_bot_response(user_input, prompt_list)
-
-        if len(common_free_slots) != 0:
-            # print('enter 2nd if')
-            # Initialize common_free_slots_str as an empty string
-            common_free_slots_str = ""
-
-            # Convert list of tuples to a list of strings
-            for slot in common_free_slots:
-                start_time, end_time = slot
-                common_free_slots_str += f"{start_time} - {end_time}, \n"
-
-            # Remove the trailing comma and space
-            common_free_slots_str = common_free_slots_str.rstrip(", ")
-
-            # Update response string
-            response = f'Here is the list of common free slots:\n{common_free_slots_str}Please confirm the time slot.'
+            # print('meeting_time:', meeting_time)
 
         if 'confirm' in user_input.lower() or 'ok' in user_input.lower() or 'yes' in user_input.lower():
             # print('enter')
@@ -176,4 +172,4 @@ def main():
 if __name__ == '__main__':
     main()
 
-# schedule a meeting with akansharawat.ind@gmail.com tomorrow
+# schedule a meeting with akansharawat.ind@gmail.com and sonalirawat0810@gmail.com tomorrow
